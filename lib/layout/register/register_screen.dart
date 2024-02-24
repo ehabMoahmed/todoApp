@@ -1,0 +1,171 @@
+import 'package:flutter/material.dart';
+import 'package:todoapp/layout/home_screen/home_screen.dart';
+import 'package:todoapp/shared/constant.dart';
+import 'package:todoapp/style/app-colors.dart';
+
+import '../../shared/resuable_component/custom_form_field.dart';
+
+class RegisterScreen extends StatefulWidget {
+  static const String routeName='Register';
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  bool isConfirmObsecure=true;
+  bool isObsecure=true;
+
+
+//3n tre2 al controller t2dr tktb text mo3yn yban fe al awl aw tgeb al text al mwgod
+  TextEditingController emailController=TextEditingController( );
+  TextEditingController FullNameController=TextEditingController( );
+  TextEditingController PassController=TextEditingController( );
+  TextEditingController confirmPasswrodController=TextEditingController( );
+
+
+//adeto formstate 3shan function al validate mwgoda fe al formstate bs msh fe ay key
+  GlobalKey<FormState> formkey=GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(image: AssetImage(
+              "assets/images/backgroundd.jpg"
+
+          ))
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          centerTitle: true,
+          title:Text('Create Account ',style: TextStyle(color: Colors.white,fontSize: 25)),
+          backgroundColor: Colors.transparent,
+        ),
+
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: formkey,//bmsabt al controller bta3t al text form field bardo btshghl al validation
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 10,),
+
+
+                  CustomFormField(
+                    keyboard:TextInputType.name ,//lama t3ml space hy3mlk awl hrf capital
+                    label:'Full Name' ,
+                    validator:(value){
+                      if(value==null||value.isEmpty){
+                        return 'this feild cant be empty';
+                      }
+              
+                      return null; //law 3ada kol dol al validate tkon b null
+                    } ,
+                    controller: FullNameController,
+              
+                  ),
+                  SizedBox(height: 10,),
+                  SizedBox(height: 10,),
+                  CustomFormField(
+                    keyboard:TextInputType.emailAddress ,
+                    label:'Email' ,
+                    validator:(value){
+                      if(value==null||value.isEmpty){
+                        return 'this feild cant be empty';
+                      }
+                      //de 3obara 3n function btbd2 tt2kd en al value mktob bnfs seght al variable da btrg3 true or false
+                      if(!RegExp(Constant.emailRegex).hasMatch(value)) {
+                        return "Enter valid Email";
+                      }
+                      return null; //law 3ada kol dol al validate tkon b null
+                    } ,
+                    controller: emailController,
+              
+                  ),
+              
+                  SizedBox(height: 10,),
+              
+                  CustomFormField(
+                    keyboard:TextInputType.visiblePassword ,
+                    label: 'pass',
+                    obsecureText: isObsecure,
+                    suffixIcon:IconButton( onPressed:(){
+              
+                      setState(() {
+                        isObsecure=!isObsecure;
+                      });
+                    } ,
+                        icon:Icon(
+                          isObsecure? Icons.visibility_off:Icons.visibility,
+                          size: 24,
+                          color: AppColors.PrimaryLightColor,
+                        ) ) ,
+                    validator: (value){
+                      if(value==null||value.isEmpty){
+                        return 'this feild cant be empty';
+                      }
+                      if(value.length<8){
+                        return'Password should be at least 8 character';
+                      }
+                      return null;
+              
+                    },
+                    controller: PassController,
+                  ),
+                  SizedBox(height: 10,),
+              
+                  CustomFormField(
+                    keyboard:TextInputType.visiblePassword ,
+                    label: 'Confirm Password',
+                    obsecureText: isConfirmObsecure,
+                    suffixIcon:IconButton( onPressed:(){
+              
+                      setState(() {
+                        isConfirmObsecure=!isConfirmObsecure;
+                      });
+                    } ,
+                        icon:Icon(
+                          isConfirmObsecure? Icons.visibility_off:Icons.visibility,
+                          size: 24,
+                          color: AppColors.PrimaryLightColor,
+                        ) ) ,
+                    validator: (value){
+                       if(value != PassController.text ){
+                         return"Don't match" ;
+                       }
+                      return null;
+              
+                    },
+                    controller: confirmPasswrodController,
+                  ),
+              
+              
+              
+                  SizedBox(height: 10,),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.PrimaryLightColor,
+                      ),
+                      onPressed: (){
+                        //law al formkey de b true nfzle kza law b true azhrle al kalam
+                        if(formkey.currentState?.validate() ??false){
+                          Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName,(route) => false,);
+                        }
+                      },
+                      child:  Text('Register  ',style: TextStyle(
+                        color: Colors.white,
+                      ),)),
+              
+                ],),
+            ),
+          ),
+        ),
+
+      ),
+    );
+  }
+}
