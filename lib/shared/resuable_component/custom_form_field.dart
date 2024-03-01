@@ -17,11 +17,14 @@ CustomFormField({required this.label,required this.keyboard, this.obsecureText=f
     return TextFormField(
       validator:validator ,
       obscureText: obsecureText, //h7otlha default false
-      obscuringCharacter: "#",
+      obscuringCharacter: "*",
       keyboardType:  keyboard,
       controller:  controller ,
       style: TextStyle(), //bta3 ale al user hyktbi
       decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20)
+        ),
         label: Text(label,style: TextStyle(color: Colors.black,fontSize: 16)),
       suffixIcon: suffixIcon,
       ),

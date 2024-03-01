@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/shared/constant.dart';
 import 'package:todoapp/style/app-colors.dart';
 
+import '../../shared/dialog_utils.dart';
 import '../../shared/resuable_component/custom_form_field.dart';
 import '../home_screen/home_screen.dart';
 import '../register/register_screen.dart';
@@ -18,7 +20,7 @@ bool isObsecure=true;
 
 //3n tre2 al controller t2dr tktb text mo3yn yban fe al awl aw tgeb al text al mwgod
  TextEditingController emailController=TextEditingController( );
-TextEditingController PassController=TextEditingController( );
+TextEditingController PasswordController=TextEditingController( );
 
 //adeto formstate 3shan function al validate mwgoda fe al formstate bs msh fe ay key
 GlobalKey<FormState> formkey=GlobalKey<FormState>();
@@ -72,7 +74,7 @@ GlobalKey<FormState> formkey=GlobalKey<FormState>();
 
                 CustomFormField(
                   keyboard:TextInputType.visiblePassword ,
-                  label: 'pass',
+                  label: 'Password',
                 obsecureText: isObsecure,
                 suffixIcon:IconButton( onPressed:(){
 
@@ -95,7 +97,7 @@ GlobalKey<FormState> formkey=GlobalKey<FormState>();
                       return null;
 
                   },
-                  controller: PassController,
+                  controller: PasswordController,
                 ),
 
                 SizedBox(height: 10,),
@@ -105,10 +107,7 @@ GlobalKey<FormState> formkey=GlobalKey<FormState>();
                   ),
                     onPressed: (){
                       //law al formkey de b true nfzle kza law b true azhrle al kalam
-                    if(formkey.currentState?.validate() ??false){
-                      //3shan hyshel al register aw al login w yfth al home
-                      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-                    }
+                   login();
                     },
                     child:  Text('Login',style: TextStyle(
                       color: Colors.white,
@@ -126,4 +125,36 @@ GlobalKey<FormState> formkey=GlobalKey<FormState>();
       ),
     );
   }
+  Future<void> login() async {
+    if(formkey.currentState?.validate() ??false){
+      DialogUtils.showLoadingDialog(context);
+      try {
+        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text,
+            password: PasswordController.text,
+        );
+        print("user id${credential.user?.uid}");
+        DialogUtils.hideLoading(context);
+
+      } on FirebaseAuthException catch (e) {
+        DialogUtils.hideLoading(context);
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+          DialogUtils.showMessage(context: context, message:  'user-not-found',postiveText: "OK",postivePress: (){
+          Navigator.pop(context);
+          });
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+          DialogUtils.showMessage(context: context, message:  'Wrong password',postiveText: "OK",postivePress: (){
+            Navigator.pop(context);
+          });
+        }
+
+        return;
+      }
+      //3shan hyshel al register aw al login w yfth al home
+
+    }
+    //Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+    }
 }

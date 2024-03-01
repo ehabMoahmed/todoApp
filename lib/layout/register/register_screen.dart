@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/layout/home_screen/home_screen.dart';
 import 'package:todoapp/shared/constant.dart';
+import 'package:todoapp/shared/dialog_utils.dart';
 import 'package:todoapp/style/app-colors.dart';
 
 import '../../shared/resuable_component/custom_form_field.dart';
@@ -20,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 //3n tre2 al controller t2dr tktb text mo3yn yban fe al awl aw tgeb al text al mwgod
   TextEditingController emailController=TextEditingController( );
   TextEditingController FullNameController=TextEditingController( );
-  TextEditingController PassController=TextEditingController( );
+  TextEditingController PasswordController=TextEditingController( );
   TextEditingController confirmPasswrodController=TextEditingController( );
 
 
@@ -114,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
               
                     },
-                    controller: PassController,
+                    controller: PasswordController,
                   ),
                   SizedBox(height: 10,),
               
@@ -134,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: AppColors.PrimaryLightColor,
                         ) ) ,
                     validator: (value){
-                       if(value != PassController.text ){
+                       if(value != PasswordController.text ){
                          return"Don't match" ;
                        }
                       return null;
@@ -152,9 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       onPressed: (){
                         //law al formkey de b true nfzle kza law b true azhrle al kalam
-                        if(formkey.currentState?.validate() ??false){
-                          Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName,(route) => false,);
-                        }
+                        createNewUer(  );
                       },
                       child:  Text('Register  ',style: TextStyle(
                         color: Colors.white,
@@ -168,4 +168,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
+  //de function bta3t al authorization law create acc
+   Future<void> createNewUer( ) async {
+     if(formkey.currentState?.validate() ??false){
+       DialogUtils.showLoadingDialog(context);
+       try {
+
+         //instance de singelton y3ny ht3ml create le al obj mara wahda law msh mwgod w  law mwgod hts5dmo
+         final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+           email: emailController.text,
+           password: PasswordController.text,
+         );
+         DialogUtils.hideLoading(context);
+       DialogUtils.showMessage(context: context, message: 'Registered successfully${credential.user?.uid}');
+         print(credential.user?.uid );
+       } on FirebaseAuthException catch (e) {
+         DialogUtils.hideLoading(context);
+         //bt handle ay Exception le al firebaseAuth b enha return code
+         if (e.code == 'weak-password') {
+           print('The password provided is too weak.');
+           DialogUtils.showMessage(context: context, message:"The password provided is too weak.",postiveText: "OK",postivePress: () => DialogUtils.hideLoading(context),  );
+         } else if (e.code == 'email-already-in-use') {
+           print('The account already exists for that email.');
+           DialogUtils.showMessage(context: context, message:"The account already exists for that email.",postiveText: "OK",postivePress: () => DialogUtils.hideLoading(context),  );
+
+         }
+         return;
+       } catch (e) {
+         DialogUtils.hideLoading(context);
+         DialogUtils.showMessage(context: context, message:"${e.toString()}",postiveText: "OK",postivePress: () => DialogUtils.hideLoading(context),  );
+
+       }
+       //Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName,(route) => false,);
+     }
+
+   }
+
 }
