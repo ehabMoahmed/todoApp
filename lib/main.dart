@@ -1,18 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapp/shared/provider/auth_provider.dart';
 import 'package:todoapp/style/theme.dart';
 
 import 'firebase_options.dart';
 import 'layout/home_screen/home_screen.dart';
 import 'layout/login/login_screen.dart';
 import 'layout/register/register_screen.dart';
+import 'layout/splash_screen/splash_screen.dart';
 
  void  main() async {
    WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [
+        //btdek list mn al provider msh provider wahed
+        ChangeNotifierProvider(create:  (context) => Authprovider()),
+      ],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,8 +36,9 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName:(context) => LoginScreen(),
         RegisterScreen.routeName:(context) => RegisterScreen(),
         HomeScreen.routeName:(context) => HomeScreen(),
+        SplashScreen.routeName:(context) => SplashScreen(),
       },
-      initialRoute: LoginScreen.routeName,
+      initialRoute: SplashScreen.routeName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

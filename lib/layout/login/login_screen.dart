@@ -1,9 +1,15 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+ import 'package:todoapp/model/user.dart';
 import 'package:todoapp/shared/constant.dart';
-import 'package:todoapp/style/app-colors.dart';
-
+ import 'package:todoapp/style/app-colors.dart';
+import 'package:todoapp/model/user.dart' as MyUser;
 import '../../shared/dialog_utils.dart';
+import '../../shared/provider/auth_provider.dart';
+import '../../shared/remote/firebase/firestore_helper.dart';
 import '../../shared/resuable_component/custom_form_field.dart';
 import '../home_screen/home_screen.dart';
 import '../register/register_screen.dart';
@@ -125,17 +131,27 @@ GlobalKey<FormState> formkey=GlobalKey<FormState>();
       ),
     );
   }
-  Future<void> login() async {
+    void login() async {
+    //lazm listen de tkon b false law 3aml create le listen bra function build
+      Authprovider provider=Provider.of<Authprovider>(context,listen: false);
     if(formkey.currentState?.validate() ??false){
       DialogUtils.showLoadingDialog(context);
       try {
+        // da al user al gaybo mn al auth
         final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: emailController.text,
             password: PasswordController.text,
         );
         print("user id${credential.user?.uid}");
         DialogUtils.hideLoading(context);
+        //3shan a2dr afr2 ben al User bta3e w al user bta3 al Auth
+        MyUser.User? user= await FirestoreHelper.GetUser(credential.user!.uid); // da al user al gaybo mn al database
+        //kda gebt obj mn al user 3ayzo yro7 ykhszno fe al provider
+        provider.setUsers( credential.user, user) ;
 
+
+         print(user!.fullname);
+    Navigator.pushNamedAndRemoveUntil(context,HomeScreen.routeName, (route) => false,);
       } on FirebaseAuthException catch (e) {
         DialogUtils.hideLoading(context);
         if (e.code == 'user-not-found') {
@@ -155,6 +171,6 @@ GlobalKey<FormState> formkey=GlobalKey<FormState>();
       //3shan hyshel al register aw al login w yfth al home
 
     }
-    //Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+
     }
 }

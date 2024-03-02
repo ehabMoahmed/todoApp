@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoapp/layout/home_screen/home_screen.dart';
+import 'package:todoapp/model/user.dart';
 import 'package:todoapp/shared/constant.dart';
 import 'package:todoapp/shared/dialog_utils.dart';
+import 'package:todoapp/shared/provider/auth_provider.dart';
+import 'package:todoapp/shared/remote/firebase/firestore_helper.dart';
 import 'package:todoapp/style/app-colors.dart';
-
+import 'package:todoapp/model/user.dart' as MyUser;
 import '../../shared/resuable_component/custom_form_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -171,6 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   //de function bta3t al authorization law create acc
    Future<void> createNewUer( ) async {
+    Authprovider provider=Provider.of<Authprovider>(context,listen: false);
      if(formkey.currentState?.validate() ??false){
        DialogUtils.showLoadingDialog(context);
        try {
@@ -180,8 +185,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
            email: emailController.text,
            password: PasswordController.text,
          );
+         await FirestoreHelper.Adduser(emailController.text, FullNameController.text, credential.user!.uid);
+
          DialogUtils.hideLoading(context);
-       DialogUtils.showMessage(context: context, message: 'Registered successfully${credential.user?.uid}');
+       DialogUtils.showMessage(context: context, message: 'Registered successfully${credential.user?.uid}', NegativeText:"OK",
+           postivePress:() {
+             provider.setUsers( credential.user,
+                 MyUser.User(
+                   id: credential.user!.uid,
+                     fullname: FullNameController.text,
+                     email: emailController.text,)  ) ;
+
+             DialogUtils.hideLoading(context);
+             Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName,(route) => false,);
+
+           },  );
          print(credential.user?.uid );
        } on FirebaseAuthException catch (e) {
          DialogUtils.hideLoading(context);
@@ -200,7 +218,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
          DialogUtils.showMessage(context: context, message:"${e.toString()}",postiveText: "OK",postivePress: () => DialogUtils.hideLoading(context),  );
 
        }
-       //Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName,(route) => false,);
      }
 
    }

@@ -46,7 +46,9 @@ class DialogUtils{
     Navigator.pop(context);
   }
 
-  static void showMessage({required BuildContext context, required String message,
+  static void showMessage({
+    required BuildContext context,
+    required String message,
     String?postiveText,
     String?NegativeText,
     void Function()? postivePress,
