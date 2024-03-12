@@ -3,9 +3,9 @@ import 'package:todoapp/model/user.dart' as MyUser;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todoapp/shared/remote/firebase/firestore_helper.dart';
 
-
+//3shan ast5dm data bta3t al user fe al app kolo
 class Authprovider extends ChangeNotifier{
-  User? firebaseUserAuth;  //da bta3 al auth
+  User? firebaseUserAuth;  //da bta3 al auth //3shan al autologin
   MyUser.User? databaseUser;  // w da obj al user bta3 al firestore
 
 void  setUsers(User? newFirebaseUserAuth, MyUser.User? newDatabaseUser){
@@ -29,6 +29,8 @@ Future<void>retrieveDatabaseUserData() async {
 Future<void> SignOut() async {
   firebaseUserAuth=null;
   databaseUser=null;
+
+  //Auth
  return await FirebaseAuth.instance.signOut();
 }
 

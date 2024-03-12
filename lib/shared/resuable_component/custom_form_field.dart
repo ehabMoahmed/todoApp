@@ -10,8 +10,8 @@ bool obsecureText;
 Widget? suffixIcon;
 fieldValidation validator;
 TextEditingController controller;
-
-CustomFormField({required this.label,required this.keyboard, this.obsecureText=false,this.suffixIcon,this.validator,required this.controller});
+int maxlines;
+CustomFormField({required this.label,required this.keyboard, this.obsecureText=false,this.suffixIcon,this.validator,required this.controller,this.maxlines=1});
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -19,7 +19,9 @@ CustomFormField({required this.label,required this.keyboard, this.obsecureText=f
       obscureText: obsecureText, //h7otlha default false
       obscuringCharacter: "*",
       keyboardType:  keyboard,
+
       controller:  controller ,
+       maxLines:maxlines ,
       style: TextStyle(), //bta3 ale al user hyktbi
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(

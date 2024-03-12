@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/layout/home_screen/provider/home_provider.dart';
 import 'package:todoapp/shared/provider/auth_provider.dart';
 import 'package:todoapp/style/theme.dart';
 
@@ -35,13 +36,16 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginScreen.routeName:(context) => LoginScreen(),
         RegisterScreen.routeName:(context) => RegisterScreen(),
-        HomeScreen.routeName:(context) => HomeScreen(),
+        HomeScreen.routeName:(context) => ChangeNotifierProvider(
+            create:(context) => HomeProvider(),
+            child: HomeScreen()),
         SplashScreen.routeName:(context) => SplashScreen(),
       },
       initialRoute: SplashScreen.routeName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      themeMode:ThemeMode.light,
       
 
     );

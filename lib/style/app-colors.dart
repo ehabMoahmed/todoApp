@@ -4,4 +4,7 @@ import 'dart:ui';
 class AppColors{
   static const Color PrimaryLightColor=Color(0xff5D9CEC);
   static const Color backgroundColor=Color(0xffDFECDB);
+  static const Color unselectedIconsColor=Color(0xffC8C9CB);
+  static const Color timeColor=Color(0xff363636);
+
 }
