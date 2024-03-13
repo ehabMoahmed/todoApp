@@ -18,8 +18,13 @@ class ListTab extends StatefulWidget {
 }
 
 class _ListTabState extends State<ListTab> {
-  DateTime selectedDate=DateTime.now() ;
+  DateTime selectedDate=DateTime ( DateTime.now().year,DateTime.now().month,DateTime.now().day) ;
   @override
+  void initstate(){
+    super.initState();
+    Authprovider provider=Provider.of<Authprovider>(context,listen: false);
+    FirestoreHelper.getTaskCollection(provider.firebaseUserAuth!.uid);
+  }
   Widget build(BuildContext context) {
     Authprovider provider=Provider.of<Authprovider>(context);
     return   Column(
