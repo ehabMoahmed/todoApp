@@ -14,143 +14,153 @@ import 'package:todoapp/shared/remote/firebase/firestore_helper.dart';
 import '../../style/app-colors.dart';
 
 class HomeScreen extends StatefulWidget {
-   static const String routeName="homeScreen";
+  static const String routeName = "homeScreen";
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-List<Widget>tabs=[ListTab(),SettingsTab()];
+  List<Widget> tabs = [ListTab(), SettingsTab()];
 
-TextEditingController titleController=TextEditingController();
-TextEditingController DescriptionController=TextEditingController();
-GlobalKey<FormState>formkey=GlobalKey();
-bool state=false;
+  TextEditingController titleController = TextEditingController();
+  TextEditingController DescriptionController = TextEditingController();
+  GlobalKey<FormState> formkey = GlobalKey();
+  bool state = false;
 
-GlobalKey <ScaffoldState> scaffoldkey=GlobalKey<ScaffoldState>();
-bool isSheetOpen=false;
-   @override
+  GlobalKey<ScaffoldState> scaffoldkey = GlobalKey<ScaffoldState>();
+  bool isSheetOpen = false;
+  @override
   Widget build(BuildContext context) {
-    Authprovider provider=Provider.of<Authprovider>(context);
-    HomeProvider homeProvider=Provider.of<HomeProvider>(context);
+    Authprovider provider = Provider.of<Authprovider>(context);
+    HomeProvider homeProvider = Provider.of<HomeProvider>(context);
     //3shan at2kd al keyboard mfto7 walaa,law not=0 yobaa al keyboard mfto7
-    bool isKeyboardOpen=MediaQuery.of(context).viewInsets.bottom!=0;
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
     return Container(
       color: AppColors.backgroundColor,
-      child:   Scaffold(
-
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-        floatingActionButton:isKeyboardOpen?null: FloatingActionButton(
-          shape: StadiumBorder(
-            side: BorderSide(
-              color: Colors.white,
-                  width:  4
-            )
-          ),
-            onPressed:  () async {
-                if(!isSheetOpen){
-                showAddTaskBottomshet();
-                    isSheetOpen=true;
-
-                    }else{
-                  if((formkey.currentState?.validate()??false)&&homeProvider.selectedDate!=null)//shof fe data mdafa wala(title w dec) w al date ykon mwgod
-                    await FirestoreHelper.AddNewTask(
-                        Task(
+      child: Scaffold(
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: isKeyboardOpen
+              ? null
+              : FloatingActionButton(
+                  shape: StadiumBorder(
+                      side: BorderSide(color: Colors.white, width: 4)),
+                  onPressed: () async {
+                    if (!isSheetOpen) {
+                      showAddTaskBottomshet();
+                      isSheetOpen = true;
+                    } else {
+                      if ((formkey.currentState?.validate() ?? false) &&
+                          homeProvider.selectedDate !=
+                              null) //shof fe data mdafa wala(title w dec) w al date ykon mwgod
+                        await FirestoreHelper.AddNewTask(
+                          Task(
                             title: titleController.text,
-                            date: homeProvider.selectedDate!.millisecondsSinceEpoch,
-                          descripition: DescriptionController.text ,
+                            date: homeProvider
+                                .selectedDate!.millisecondsSinceEpoch,
+                            descripition: DescriptionController.text,
+                          ),
+                          provider.firebaseUserAuth!.uid,
+                        );
 
-
-                            ),
-                         provider.firebaseUserAuth!.uid,
-
-                    );
-
-             DialogUtils.showMessage(context: context,
-                 message:  "Task Added Succesfully",
-             postiveText: "ok",
-             postivePress:  (){Navigator.pop(context) ;Navigator.pop(context);}
-             );
-             isSheetOpen =false;
-          }
-setState(() {
-
-});
-            }  ,
-          child:isSheetOpen? Icon (Icons.check,color: Colors.white,size: 15,): Icon (Icons.add,color: Colors.white,size: 15,),
-
-        ),
-        bottomNavigationBar: BottomAppBar(
-          clipBehavior: Clip.antiAlias, //ah 3ayz a2oso
-          color: Colors.transparent,
-           elevation: 20,
-           shape: CircularNotchedRectangle(),
-           notchMargin:10  , //margin b ad eh
-          child: BottomNavigationBar(
-            onTap: (index){
-              homeProvider.changeTab(index);
-            },
-            backgroundColor: Colors.white,
-            currentIndex: homeProvider.currentNavIndex,
-            items: [
-              BottomNavigationBarItem(icon: SvgPicture.asset("assets/images/list.svg",color: AppColors.unselectedIconsColor,),
-                  activeIcon:SvgPicture.asset("assets/images/list.svg",colorFilter: ColorFilter.mode(AppColors.PrimaryLightColor,  BlendMode.srcIn),),
-                  label: "" ),
-              BottomNavigationBarItem(icon: SvgPicture.asset("assets/images/settings.svg"),
-                activeIcon: SvgPicture.asset("assets/images/settings.svg",color: AppColors.PrimaryLightColor,),
-                  label: ""  ,),
-
-            ],
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        appBar:  AppBar(
-          title: Text('Todo list app',style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.blue,
-          leading:IconButton(
-            onPressed: () async {
-                 await   provider.SignOut();
-                 Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+                      DialogUtils.showMessage(
+                          context: context,
+                          message: "Task Added Succesfully",
+                          postiveText: "ok",
+                          postivePress: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                      isSheetOpen = false;
+                    }
+                    setState(() {});
+                  },
+                  child: isSheetOpen
+                      ? Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 15,
+                        )
+                      : Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 15,
+                        ),
+                ),
+          bottomNavigationBar: BottomAppBar(
+            clipBehavior: Clip.antiAlias, //ah 3ayz a2oso
+            color: Colors.transparent,
+            elevation: 20,
+            shape: CircularNotchedRectangle(),
+            notchMargin: 10, //margin b ad eh
+            child: BottomNavigationBar(
+              onTap: (index) {
+                homeProvider.changeTab(index);
               },
-              icon: Icon (
+              backgroundColor: Colors.white,
+              currentIndex: homeProvider.currentNavIndex,
+              items: [
+                BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      "assets/images/list.svg",
+                      color: AppColors.unselectedIconsColor,
+                    ),
+                    activeIcon: SvgPicture.asset(
+                      "assets/images/list.svg",
+                      colorFilter: ColorFilter.mode(
+                          AppColors.PrimaryLightColor, BlendMode.srcIn),
+                    ),
+                    label: ""),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset("assets/images/settings.svg"),
+                  activeIcon: SvgPicture.asset(
+                    "assets/images/settings.svg",
+                    color: AppColors.PrimaryLightColor,
+                  ),
+                  label: "",
+                ),
+              ],
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Text('Todo list app', style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.blue,
+            leading: IconButton(
+              onPressed: () async {
+                await provider.SignOut();
+                Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+              },
+              icon: Icon(
                 Icons.exit_to_app,
                 size: 20,
                 color: Colors.white,
               ),
-              ) ,
-        ),
-        body: Scaffold(
-          key: scaffoldkey,
-          body: tabs[homeProvider.currentNavIndex],
-        )
-
-      ),
+            ),
+          ),
+          body: Scaffold(
+            key: scaffoldkey,
+            body: tabs[homeProvider.currentNavIndex],
+          )),
     );
-
   }
 
-  void showAddTaskBottomshet(){
-     scaffoldkey.currentState?.showBottomSheet(
-             (context) =>AddTaskSheet(
-               titleController: titleController,
-         descController: DescriptionController,
-         formKey: formkey,
-
-         onCancel:(){
-           isSheetOpen=false;
-           setState(() {
-
-           });
-         }
-     ),
-     enableDrag: false
-     );
-
+  void showAddTaskBottomshet() {
+    scaffoldkey.currentState?.showBottomSheet(
+        (context) => AddTaskSheet(
+            titleController: titleController,
+            descController: DescriptionController,
+            formKey: formkey,
+            onCancel: () {
+              isSheetOpen = false;
+              setState(() {});
+            }),
+        enableDrag: false);
   }
-  void changestate(newState){
-     if(state==newState)return;
-    state=newState;
+
+  void changestate(newState) {
+    if (state == newState) return;
+    state = newState;
   }
 }

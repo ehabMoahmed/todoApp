@@ -8,6 +8,7 @@ import 'package:todoapp/style/theme.dart';
 
 import 'firebase_options.dart';
 import 'layout/home_screen/home_screen.dart';
+import 'layout/home_screen/widget/edit_widget.dart';
 import 'layout/login/login_screen.dart';
 import 'layout/register/register_screen.dart';
 import 'layout/splash_screen/splash_screen.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
+        EditWidget.routeName:(context) => EditWidget(),
         LoginScreen.routeName:(context) => LoginScreen(),
         RegisterScreen.routeName:(context) => RegisterScreen(),
         HomeScreen.routeName:(context) => ChangeNotifierProvider(
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode:ThemeMode.light,
+      //home: EditWidget(),
       
 
     );

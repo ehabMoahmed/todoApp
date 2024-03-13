@@ -17,5 +17,11 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
  }
 
+  String? TaskID;
+  void changetaskID(   String?  NewTask){
+    TaskID=NewTask;
+    notifyListeners();
+  }
+
 
 }

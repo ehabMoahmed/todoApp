@@ -102,6 +102,7 @@ return tasksCollection;
   static Future<void> updateTask(String userId, String taskId, Task updatedTask) async {
     var ref = getTaskCollection(userId);
     var taskDoc = ref.doc(taskId);
+
     await taskDoc.update(updatedTask.tofirestore());
   }
 

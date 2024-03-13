@@ -8,6 +8,7 @@ import 'package:todoapp/shared/remote/firebase/firestore_helper.dart';
 
 import '../../../shared/provider/auth_provider.dart';
 import '../provider/home_provider.dart';
+import 'edit_widget.dart';
 
 class TaskWidget extends StatefulWidget {
   //l2 al data ale fe al widget hgbha mn al obj ale asmo task
@@ -33,17 +34,30 @@ HomeProvider providerr=Provider.of<HomeProvider>(context);
       child: Slidable(
         //htzhrlk al bdaya 3ala al shmal
         startActionPane: ActionPane(
-          extentRatio: 0.2,
+          extentRatio: 0.4,
             motion:ScrollMotion (),
             children:  [
               SlidableAction(
                 onPressed: (contex){
+
                   FirestoreHelper.deleteTask(userID:provider.firebaseUserAuth!.uid, taskID:   widget.task.taskID??"");
                 },
                 backgroundColor: Color(0xFFFE4A49),
                 foregroundColor: Colors.white,
                 icon: Icons.delete,
                 label: 'Delete',
+              ),
+
+              SlidableAction(
+                onPressed:  (contex){
+
+                  providerr.changetaskID(widget.task.taskID);
+                  Navigator.pushNamed(context, EditWidget.routeName, arguments: widget.task );
+                },
+                backgroundColor: Color(0xFF21B7CA),
+                foregroundColor: Colors.white,
+                icon: Icons.edit,
+                label: 'Edit',
               ),
             ]),
          child: Container(
@@ -75,6 +89,7 @@ HomeProvider providerr=Provider.of<HomeProvider>(context);
                   children: [
                     widget.task.isDone==false?Text(
                      widget.task.title??"",
+
                     style: Theme.of(context).textTheme.titleMedium,
                     ):Text(widget.task.title??"",
                       style: Theme.of(context).textTheme.titleMedium?.
@@ -114,7 +129,7 @@ HomeProvider providerr=Provider.of<HomeProvider>(context);
                      var userID=FirebaseAuth.instance.currentUser?.uid;
                     var taskID= widget.task.taskID;
                     print("userIDis ${userID}and taskID is${taskID}");
-                    Task updatedTaskk=Task(title: widget.task.title ,date:  widget.task.date, descripition: widget.task.descripition,isDone: widget.task.isDone);
+                    Task updatedTaskk=Task(title: widget.task.title ,date:  widget.task.date,taskID:taskID, descripition: widget.task.descripition,isDone: widget.task.isDone);
                       FirestoreHelper.updateTask(userID! , taskID! , updatedTaskk);
                      print (widget.task.isDone);
                     setState(() {
