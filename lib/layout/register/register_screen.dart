@@ -34,13 +34,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> formkey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage(
-              "assets/images/backgroundd.jpg"
+    Authprovider provider=Provider.of<Authprovider>(context);
 
-          ))
-      ),
+    return Container(
+        decoration: provider.theme==ThemeMode.light?
+    BoxDecoration(
+        image: DecorationImage(image: AssetImage(
+        "assets/images/backgroundd.jpg"
+
+    ))
+    ):BoxDecoration(
+    color: AppColors. DarkbackgroundColor,
+    ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -50,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
 
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(top: 85,left: 30,right: 30),
           child: Form(
             key: formkey,//bmsabt al controller bta3t al text form field bardo btshghl al validation
             child: SingleChildScrollView(
@@ -68,11 +73,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if(value==null||value.isEmpty){
                         return 'this feild cant be empty';
                       }
-              
+
                       return null; //law 3ada kol dol al validate tkon b null
                     } ,
                     controller: FullNameController,
-              
+
                   ),
                   SizedBox(height: 10,),
                   SizedBox(height: 10,),
@@ -90,17 +95,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null; //law 3ada kol dol al validate tkon b null
                     } ,
                     controller: emailController,
-              
+
                   ),
-              
+
                   SizedBox(height: 10,),
-              
+
                   CustomFormField(
                     keyboard:TextInputType.visiblePassword ,
                     label: 'pass',
                     obsecureText: isObsecure,
                     suffixIcon:IconButton( onPressed:(){
-              
+
                       setState(() {
                         isObsecure=!isObsecure;
                       });
@@ -118,18 +123,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return'Password should be at least 8 character';
                       }
                       return null;
-              
+
                     },
                     controller: PasswordController,
                   ),
                   SizedBox(height: 10,),
-              
+
                   CustomFormField(
                     keyboard:TextInputType.visiblePassword ,
                     label: 'Confirm Password',
                     obsecureText: isConfirmObsecure,
                     suffixIcon:IconButton( onPressed:(){
-              
+
                       setState(() {
                         isConfirmObsecure=!isConfirmObsecure;
                       });
@@ -144,13 +149,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                          return"Don't match" ;
                        }
                       return null;
-              
+
                     },
                     controller: confirmPasswrodController,
                   ),
-              
-              
-              
+
+
+
                   SizedBox(height: 10,),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -163,7 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child:  Text('Register  ',style: TextStyle(
                         color: Colors.white,
                       ),)),
-              
+
                 ],),
             ),
           ),
@@ -189,17 +194,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
          DialogUtils.hideLoading(context);
        DialogUtils.showMessage(context: context, message: 'Registered successfully${credential.user?.uid}', NegativeText:"OK",
-           postivePress:() {
+           negativePress :() {
+             DialogUtils.hideLoading(context);
              provider.setUsers( credential.user,
                  MyUser.User(
                    id: credential.user!.uid,
                      fullname: FullNameController.text,
                      email: emailController.text,)  ) ;
-
              DialogUtils.hideLoading(context);
              Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName,(route) => false,);
-
            },  );
+
          print(credential.user?.uid );
        } on FirebaseAuthException catch (e) {
          DialogUtils.hideLoading(context);

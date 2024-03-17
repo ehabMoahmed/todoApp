@@ -8,13 +8,15 @@ class AppTheme{
       backgroundColor: AppColors.PrimaryLightColor,
     ) ,
     appBarTheme: AppBarTheme(
+      toolbarHeight: 100,
       titleTextStyle: TextStyle(color: Colors.white,fontSize: 20),
       backgroundColor: AppColors.PrimaryLightColor,
     ),
-    scaffoldBackgroundColor: AppColors.backgroundColor,
+    scaffoldBackgroundColor: AppColors.LightbackgroundColor,
     colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.PrimaryLightColor,
         primary:  AppColors.PrimaryLightColor,
+      secondary: Colors.black
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: AppColors.PrimaryLightColor,
@@ -43,6 +45,50 @@ class AppTheme{
       ),
     ),
   );
-  static  ThemeData darkTheme=ThemeData();
+
+  static  ThemeData DarkTheme=ThemeData(
+    floatingActionButtonTheme:FloatingActionButtonThemeData(
+      backgroundColor: AppColors.PrimaryDarkColor  ,
+    ) ,
+    appBarTheme: AppBarTheme(
+      toolbarHeight: 100,
+      titleTextStyle: TextStyle(color: Colors.black,fontSize: 20),
+      backgroundColor: AppColors.PrimaryLightColor ,
+    ),
+    scaffoldBackgroundColor:Colors.black ,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.PrimaryDarkColor,
+      primary:  AppColors.PrimaryDarkColor ,
+      secondary: Colors.white
+    ),
+
+
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedItemColor: AppColors.DarkbackgroundColor,
+      unselectedItemColor: Colors.white ,
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
+
+    ),
+    useMaterial3: false,
+
+    textTheme: TextTheme(
+      titleSmall: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 12,
+          color: Colors.white
+      ),
+      titleMedium: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 18,
+          color: AppColors.PrimaryDarkColor
+      ),
+      labelMedium: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w700,
+        fontSize: 18,
+      ),
+    ),
+  );
 
 }

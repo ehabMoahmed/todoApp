@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/auth_provider.dart';
 
 typedef fieldValidation= String? Function(String?)? ;
 
@@ -14,6 +17,8 @@ int maxlines;
 CustomFormField({required this.label,required this.keyboard, this.obsecureText=false,this.suffixIcon,this.validator,required this.controller,this.maxlines=1});
   @override
   Widget build(BuildContext context) {
+    Authprovider provider=Provider.of<Authprovider>(context);
+
     return TextFormField(
       validator:validator ,
       obscureText: obsecureText, //h7otlha default false
@@ -27,7 +32,7 @@ CustomFormField({required this.label,required this.keyboard, this.obsecureText=f
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20)
         ),
-        label: Text(label,style: TextStyle(color: Colors.black,fontSize: 16)),
+        label: Text(label,style: TextStyle(color: provider.theme==ThemeMode.light?Colors.black:Colors.white,fontSize: 16)),
       suffixIcon: suffixIcon,
       ),
     );

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/model/task.dart';
 import 'package:todoapp/shared/remote/firebase/firestore_helper.dart';
+import 'package:todoapp/style/app-colors.dart';
 
 import '../../../shared/provider/auth_provider.dart';
 import '../provider/home_provider.dart';
@@ -23,6 +24,7 @@ class TaskWidget extends StatefulWidget {
 class _TaskWidgetState extends State<TaskWidget> {
   @override
   Widget build(BuildContext context) {
+
     //resposive >>mediaQuery htglk height al shasha w width al shasha w t2olo ana 3ayz al widget de nsba mn hight al shasha
 var height=MediaQuery.of(context).size.height;
 DateTime taskDate=DateTime.fromMicrosecondsSinceEpoch(widget.task.date??0);
@@ -63,7 +65,7 @@ HomeProvider providerr=Provider.of<HomeProvider>(context);
          child: Container(
 
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: provider.theme==ThemeMode.light?Colors.white:AppColors.DarkbackgroundColor,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
@@ -104,7 +106,7 @@ HomeProvider providerr=Provider.of<HomeProvider>(context);
                          Icon
                            (
                            Icons.access_alarm_outlined,
-                          color: Colors.black,
+                          color:   Theme.of(context).colorScheme.secondary,
                            size: 20,
                          ),
                          SizedBox(width: 10,),

@@ -30,8 +30,8 @@ class _ListTabState extends State<ListTab> {
     return   Column(
       children: [
         EasyInfiniteDateTimeLine(
-
           firstDate: DateTime.now(),
+          activeColor:   provider.theme==ThemeMode.light?Colors.white:AppColors.DarkbackgroundColor,
           focusDate: selectedDate, //al date ale wa2f 3leh delwa2ty
           lastDate: DateTime.now().add(Duration(days: 365)),
           timeLineProps: EasyTimeLineProps(
@@ -40,14 +40,15 @@ class _ListTabState extends State<ListTab> {
 
           dayProps: EasyDayProps(
             activeDayStyle:  DayStyle(decoration: BoxDecoration(
-              color: AppColors.PrimaryLightColor,
+              color:  provider.theme==ThemeMode.light?Colors.white:AppColors.DarkbackgroundColor,
             )),
             inactiveDayStyle:DayStyle(
               decoration: BoxDecoration(
-                color: Colors.white
+                color:  provider.theme==ThemeMode.light?Colors.white:AppColors.DarkbackgroundColor
               )
             ) ,
-            todayHighlightColor: Colors.red,
+            todayHighlightColor:  provider.theme==ThemeMode.light?Colors.white:AppColors.DarkbackgroundColor,
+            todayHighlightStyle: TodayHighlightStyle.withBackground,
 
 
           ),
@@ -64,6 +65,7 @@ class _ListTabState extends State<ListTab> {
             });
           },
         ),
+        SizedBox(height: 20,),
         //h3rd shkl loading lhd mgeb al tasks w b3den h3ml setstate tzhr listview
         Expanded(
 

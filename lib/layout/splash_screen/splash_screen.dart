@@ -15,6 +15,8 @@ static const String routeName='SplashScreen';
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
+    Authprovider provider = Provider.of<Authprovider>(context);
+
     //htkhleh yshtghl w2t mo3yn w b3den ynfz func mo3yna
     Future.delayed(Duration(seconds: 2),(){
       CheckAutoLogin();
@@ -22,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/images/splash.jpg',),
+            image: AssetImage(provider.theme==ThemeMode.light?'assets/images/splash.jpg':"assets/images/splash – 1.png",),
           fit: BoxFit.cover,//yakhod al screen kolha
 
         )

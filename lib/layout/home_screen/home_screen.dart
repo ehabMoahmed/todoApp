@@ -10,7 +10,7 @@ import 'package:todoapp/model/task.dart';
 import 'package:todoapp/shared/dialog_utils.dart';
 import 'package:todoapp/shared/provider/auth_provider.dart';
 import 'package:todoapp/shared/remote/firebase/firestore_helper.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../style/app-colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //3shan at2kd al keyboard mfto7 walaa,law not=0 yobaa al keyboard mfto7
     bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
     return Container(
-      color: AppColors.backgroundColor,
+      color: provider.theme==ThemeMode.light?AppColors.LightbackgroundColor:Colors.black ,
       child: Scaffold(
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ? null
               : FloatingActionButton(
                   shape: StadiumBorder(
-                      side: BorderSide(color: Colors.white, width: 4)),
+                      side: BorderSide(color: provider.theme==ThemeMode.light?Colors.white:AppColors.DarkbackgroundColor, width: 4)),
                   onPressed: () async {
                     if (!isSheetOpen) {
                       showAddTaskBottomshet();
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: (index) {
                 homeProvider.changeTab(index);
               },
-              backgroundColor: Colors.white,
+              backgroundColor:provider.theme==ThemeMode.light?Colors.white:AppColors.DarkbackgroundColor,
               currentIndex: homeProvider.currentNavIndex,
               items: [
                 BottomNavigationBarItem(
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Text('Todo list app', style: TextStyle(color: Colors.white)),
+            title: Text( homeProvider.currentNavIndex==0?AppLocalizations.of(context)!.todo:AppLocalizations.of(context)!.settings, style: TextStyle(color: Colors.white)),
             backgroundColor: Colors.blue,
             leading: IconButton(
               onPressed: () async {

@@ -32,12 +32,17 @@ TextEditingController PasswordController=TextEditingController( );
 GlobalKey<FormState> formkey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    Authprovider provider=Provider.of<Authprovider>(context);
+
     return Container(
-      decoration: BoxDecoration(
+      decoration: provider.theme==ThemeMode.light?
+      BoxDecoration(
         image: DecorationImage(image: AssetImage(
           "assets/images/backgroundd.jpg"
 
         ))
+      ):BoxDecoration(
+        color: AppColors. DarkbackgroundColor,
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -61,16 +66,7 @@ GlobalKey<FormState> formkey=GlobalKey<FormState>();
                 CustomFormField(
                   keyboard:TextInputType.emailAddress ,
                   label:'Email' ,
-                validator:(value){
-                    if(value==null||value.isEmpty){
-                      return 'this feild cant be empty';
-                    }
-                    //de 3obara 3n function btbd2 tt2kd en al value mktob bnfs seght al variable da btrg3 true or false
-                    if(!RegExp(Constant.emailRegex).hasMatch(value)) {
-                      return "Enter valid Email";
-                    }
-                    return null; //law 3ada kol dol al validate tkon b null
-                } ,
+
                   controller: emailController,
 
                   ),

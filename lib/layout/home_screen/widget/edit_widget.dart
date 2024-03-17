@@ -8,6 +8,7 @@ import 'package:todoapp/shared/dialog_utils.dart';
 import 'package:todoapp/shared/remote/firebase/firestore_helper.dart';
 import 'package:todoapp/style/theme.dart';
 
+import '../../../shared/provider/auth_provider.dart';
 import '../../../shared/resuable_component/custom_form_field.dart';
 import '../../../style/app-colors.dart';
 import '../home_screen.dart';
@@ -32,11 +33,13 @@ class _EditWidgetState extends State<EditWidget> {
 
    @override
   Widget build(BuildContext context) {
+     Authprovider provider = Provider.of<Authprovider>(context);
+
      Task tasks=ModalRoute.of(context)?.settings.arguments as Task;
 
      return    Container(
       decoration: BoxDecoration(
-        color: AppColors.backgroundColor,
+        color: provider.theme==ThemeMode.light?AppColors.LightbackgroundColor:Colors.black,
       ),
       child: Stack(
         children: [
@@ -57,7 +60,7 @@ class _EditWidgetState extends State<EditWidget> {
             padding: const EdgeInsets.only( top: 30,bottom: 70,left: 30,right: 30,),
             child: Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-              color: Colors.white,
+              color: provider.theme==ThemeMode.light?AppColors.LightbackgroundColor:AppColors.DarkbackgroundColor,
               margin: EdgeInsets.only( top: 100),
               child: Form(
                 key: formkey,
